@@ -1,0 +1,103 @@
+<div class="container">
+  <div fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+    <h3>Select currencies from the drop down lists to start the conversion</h3>
+    <form [formGroup]="form">
+      <div
+        fxLayout="row wrap"
+        fxLayout.lt-md="column"
+        fxFlexFill
+        fxLayoutGap="1em"
+        fxLayoutAlign="start end"
+      >
+        <h4 fxFlex="30">Select base value and unit</h4>
+
+        <mat-form-field fxFlex="25">
+          <mat-label>Value</mat-label>
+          <input
+            matInput
+            placeholder="Ex. 1"
+            formControlName="fromValue"
+            type="number"
+            (change)="
+              lengthConverter(
+                form.get('fromValue')?.value,
+                'toValue',
+                form.get('fromUnit')?.value,
+                form.get('toUnit')?.value
+              )
+            "
+          />
+        </mat-form-field>
+
+        <mat-form-field fxFlex="25">
+          <mat-label>Length</mat-label>
+          <mat-select formControlName="fromUnit" name="from"
+          (selectionChange)="
+            lengthConverter(
+              form.get('fromValue')?.value,
+              'toValue',
+              form.get('fromUnit')?.value,
+              form.get('toUnit')?.value
+            )
+          "
+          >
+            <mat-option
+              [value]="option"
+              *ngFor="let option of lengthList"
+              >{{ option.name }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+
+        <h4 fxFlex="30">Select target value and unit</h4>
+
+        <mat-form-field fxFlex="25">
+          <mat-label>Value</mat-label>
+          <input
+            matInput
+            placeholder="Ex. 1"
+            formControlName="toValue"
+            type="number"
+            (change)="
+              lengthConverter(
+                form.get('toValue')?.value,
+                'fromValue',
+                form.get('toUnit')?.value,
+                form.get('fromUnit')?.value
+              )
+            "
+          />
+        </mat-form-field>
+
+        <mat-form-field fxFlex="25">
+          <mat-label>Unit</mat-label>
+          <mat-select formControlName="toUnit" name="to"
+          (selectionChange)="
+            lengthConverter(
+              form.get('fromValue')?.value,
+              'toValue',
+              form.get('toUnit')?.value,
+              form.get('fromUnit')?.value
+            )
+          "
+          >
+            <mat-option
+              [value]="option"
+              *ngFor="let option of lengthList"
+              >{{ option.name }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <h3 fxLayout="row" fxLayoutAlign="space-around center" *ngIf="form.valid">
+        {{ form?.get("fromValue")?.value }}
+        {{ form?.get("fromUnit")?.value?.shortName }}
+        ({{ form?.get("fromUnit")?.value?.name }}) =
+        {{ form?.get("toValue")?.value }}
+        {{ form?.get("toUnit")?.value?.shortName }}
+        ({{ form?.get("toUnit")?.value?.name }})
+      </h3>
+    </form>
+  </div>
+</div>

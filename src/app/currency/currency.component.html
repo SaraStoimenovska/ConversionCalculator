@@ -1,0 +1,89 @@
+<div class="container">
+  <div fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+    <h3>Select currencies from the drop down lists to start the conversion</h3>
+    <form [formGroup]="form">
+      <div
+        fxLayout="row wrap"
+        fxLayout.lt-md="column"
+        fxFlexFill
+        fxLayoutGap="5em"
+        fxLayoutGap.lt-md="1em"
+        fxLayoutAlign="start center"
+      >
+        <h4 fxFlex="30">Select base amount and currency</h4>
+
+        <mat-form-field fxFlex="20">
+          <mat-label>Amount</mat-label>
+          <input matInput placeholder="Ex. 1" formControlName="fromAmount" />
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20">
+          <mat-label>Currency</mat-label>
+          <mat-select formControlName="fromCurrency" name="from">
+            <mat-option [value]="option" *ngFor="let option of currencyList">{{
+              option.id
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <h4 fxFlex="30">Select target amount and currency</h4>
+
+        <mat-form-field fxFlex="20">
+          <mat-label>Amount</mat-label>
+          <input matInput placeholder="Ex. 1" formControlName="toAmount" />
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20">
+          <mat-label>Currency</mat-label>
+          <mat-select formControlName="toCurrency" name="to">
+            <mat-option [value]="option" *ngFor="let option of currencyList">{{
+              option.id
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <h3 fxLayout="row" fxLayoutAlign="space-around center">
+        {{
+          form?.get("fromAmount")?.value
+            | currency: form?.get("fromCurrency")?.value?.id:"symbol"
+        }}
+        ({{ form?.get("fromCurrency")?.value?.currencyName }}) =
+        {{
+          form?.get("toAmount")?.value
+            | currency: form?.get("toCurrency")?.value?.id:"symbol"
+        }}
+        ({{ form?.get("toCurrency")?.value?.currencyName }})
+      </h3>
+
+      <div
+        class="historical-data"
+        fxLayout="column"
+        fxLayoutAlign="start center"
+        fxFlexFill
+      >
+        <h3>Show historical data for the last 8 days</h3>
+        <div fxLayout="row">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="
+              showHistoricalData(
+                form?.get('fromCurrency')?.value,
+                form?.get('toCurrency')?.value
+              )
+            "
+          >
+            Show historical data
+          </button>
+        </div>
+
+        <div fxFlexFill *ngIf="showData" class="canvas-container">
+          <canvas id="myChart1" width="700" height="250" #mychart1></canvas>
+          <br />
+          <canvas id="myChart2" width="700" height="250" #mychart2></canvas>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

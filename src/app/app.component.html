@@ -1,0 +1,8 @@
+<div> 
+  <conversion-toolbar></conversion-toolbar>
+</div>
+
+<ng-container *ngIf="loading$ | async">
+  <div class="overlay"></div>
+  <mat-spinner></mat-spinner>
+</ng-container>
